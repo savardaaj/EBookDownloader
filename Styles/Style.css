@@ -1,0 +1,9 @@
+﻿/*#MainContent_tbDownloadFolder {
+    width: 50%;
+}*/
+input[type="file"] {
+    display: inline;
+}
+/*#MainContent_tbLog {
+    max-width: unset;
+}*/
