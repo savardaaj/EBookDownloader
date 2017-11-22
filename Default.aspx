@@ -7,7 +7,6 @@
                 <td>
                     <asp:TextBox ID="tbDownloadFolder" runat="server" Text="C:\Users\Alex\Downloads\EBooks"/><asp:FileUpload ID="fileUpload" runat="server" />
                 </td>
-                
             </tr>
             <tr>
                 <td>
@@ -48,6 +47,6 @@
     <asp:TextBox ID="tbLog" runat="server" Height="150" Width="500"></asp:TextBox>
 
 
-    <script src="Scripts/default.js?v=1.0a" type="text/javascript" ></script>
+    <script src="Scripts/default.js?v=1.0b" type="text/javascript" ></script>
     <link rel="stylesheet" href="Styles/Style.css?v1.0b" type="text/css">
 </asp:Content>

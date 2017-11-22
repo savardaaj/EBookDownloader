@@ -4,6 +4,9 @@
 input[type="file"] {
     display: inline;
 }
+td label {
+    float: right;
+}
 /*#MainContent_tbLog {
     max-width: unset;
 }*/
