@@ -39,7 +39,7 @@ public class HTMLScraper
                     //9th td is extension
                     //10th td is link [1]
                     
-                    if(cell.InnerText == "English")
+                    if(cell.InnerText.Trim(' ') == "English")
                     {
                         //Get the fileType td
                         HtmlNode tdFileType = cell;
@@ -47,18 +47,18 @@ public class HTMLScraper
                         {
                             tdFileType = tdFileType.NextSibling;
 
-                            if (tdFileType.InnerText == "mobi")
+                            if (tdFileType.InnerText.Trim(' ') == "mobi")
                             {
                                 book.fileType = ".mobi";
                                 mobiLink = tdFileType.NextSibling.NextSibling.FirstChild.Attributes["href"].Value;
                                 //Mobi is the most desired format so return if we find it
                                 return mobiLink;
                             }
-                            else if (tdFileType.InnerText == "epub")
+                            else if (tdFileType.InnerText.Trim(' ') == "epub")
                             {
                                 epubLink = tdFileType.NextSibling.NextSibling.FirstChild.Attributes["href"].Value;
                             }
-                            else if (tdFileType.InnerText == "pdf")
+                            else if (tdFileType.InnerText.Trim(' ') == "pdf")
                             {
                                 pdfLink = tdFileType.NextSibling.NextSibling.FirstChild.Attributes["href"].Value;
                             }
@@ -110,7 +110,7 @@ public class HTMLScraper
         return "No Link Found";
     }
 
-    public void GetCoverImage(EBook book)
+    public string GetCoverImage(EBook book)
     {
         HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
         WebRequestHandler wrh = new WebRequestHandler();
@@ -140,8 +140,36 @@ public class HTMLScraper
         {
             var temp = coverImageHref.Split('.');
             book.coverImageLocation += "." + temp[temp.Length -1];
-            wch.Download(coverImageHref, book.coverImageLocation, book);
-            eh.SendEmail(book.coverImageLocation, book);
+            return coverImageHref;
         }
+        return "";
+    }
+
+    public string GetDownloadLink(string htmlData)
+    {
+        //< a href = "http://libgen.io/get.php?md5=4B20922BE1E8DDADD938A357AC058687&amp;key=XWQEVBE8JD8S21TO" >< h2 > GET </ h2 ></ a >
+
+        HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
+
+        //Loads entire page
+        htmlDoc.LoadHtml(htmlData);
+
+        //All tables elements in the document
+        foreach (HtmlNode table in htmlDoc.DocumentNode.SelectNodes("//table"))
+        {
+            foreach (HtmlNode row in table.SelectNodes("tr"))
+            {
+                foreach (HtmlNode cell in row.SelectNodes("th|td"))
+                {
+                    if (cell.InnerHtml.Trim(' ').Contains("http://libgen.io/get.php"))
+                    {
+                        return cell.FirstChild.Attributes["href"].Value;
+                    }
+                }
+            }
+        }
+
+
+    return "";
     }
 }

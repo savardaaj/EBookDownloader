@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -22,18 +23,29 @@ public class FileTypeConverter
             string newFile = fileName.Split('.')[0] + ".mobi";
             string oldFile = fileName;
             Process converter = new Process();
-            converter.StartInfo.UseShellExecute = true;
-            converter.StartInfo.FileName = (@"C:\Program Files\Calibre2\ebook-convert.exe");
+            ProcessStartInfo startInfo = new ProcessStartInfo(@"C:\Program Files\Calibre2\ebook-convert.exe");
+            startInfo.UseShellExecute = false;
+            startInfo.FileName = (@"ebook-convert.exe");
+            startInfo.WorkingDirectory = Path.GetDirectoryName(@"C:\Program Files\Calibre2\ebook-convert.exe");
+            startInfo.ErrorDialog = true;
             if (coverImage == "")
             {
-                converter.StartInfo.Arguments = "\"" + oldFile + "\"" + " \"" + newFile + "\"";
+                startInfo.Arguments = "\"" + oldFile + "\"" + " \"" + newFile + "\"";
             }
             else
             {
-                converter.StartInfo.Arguments = "\"" + oldFile + "\"" + " \"" + newFile + "\"" + " --cover " + "\"" + coverImage + "\"";
+                startInfo.Arguments = "\"" + oldFile + "\"" + " \"" + newFile + "\"" + " --cover " + "\"" + coverImage + "\"";
             }
             //converter.StartInfo.CreateNoWindow = true;
-            converter.Start();
+            try
+            {
+                Process.Start(startInfo);
+                //startInfo.WaitForExit();
+            }
+            catch(Exception e)
+            {
+                //Converter threw exception
+            }
             return newFile;
         }
         catch (Exception ex)

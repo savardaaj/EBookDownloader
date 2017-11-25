@@ -44,7 +44,7 @@
     </div>
     <asp:Label ID="lblDownloadPercent" runat="server" Text="Label">0%</asp:Label>
 
-    <asp:TextBox ID="tbLog" runat="server" Height="150" Width="500"></asp:TextBox>
+    <asp:TextBox ID="tbLog" runat="server" Height="150" Width="500" TextMode="MultiLine" Rows="10" Columns="10"></asp:TextBox>
 
 
     <script src="Scripts/default.js?v=1.0b" type="text/javascript" ></script>

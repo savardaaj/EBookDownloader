@@ -18,44 +18,36 @@ public class EmailHandler
         //
     }
 
-    public void SendEmail(string attachment, EBook book)
+    public void SendEmail(EBook book, string toEmail)
     {
         try
         {
             //put these in a config file. Encrypt?
             NetworkCredential credentials = new NetworkCredential("dummymailsail@gmail.com", "1.13198824");
             FileTypeConverter ftc = new FileTypeConverter();
-            //if (tbEmail.Text == "")
-            //{
-            //    textBoxToEmail.BackColor = System.Drawing.Color.PaleVioletRed;
-            //}
-            //else
-            //{
-            //    textBoxToEmail.BackColor = System.Drawing.Color.White;
-
-                MailMessage mail = new MailMessage(new MailAddress("dummymailsail@gmail.com"), new MailAddress("savarda91_01@kindle.com"));
-                mail.Body = "Doesn't matter";
-                if (!(attachment.Split('.')[1].Equals("mobi"))) //If the attchment file is not a mobi, convert it
+            MailMessage mail = new MailMessage(new MailAddress("dummymailsail@gmail.com"), new MailAddress(toEmail));
+            mail.Subject = "ebook";
+            mail.Body = "";
+            if (book.fileType != ".mobi")
+            {
+                book.fileLocation = ftc.ConvertToMobi(book.fileLocation, book.coverImageLocation);
+                if(book.fileLocation == "")
                 {
-                    attachment = ftc.ConvertToMobi(attachment, book.coverImage);
-                    if (!File.Exists(attachment))
-                    {
-                        return;
-                    }
+                    return;
                 }
-                mail.Attachments.Add(new Attachment(attachment));
-                //mail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure | DeliveryNotificationOptions.OnSuccess;
+            }
+            mail.Attachments.Add(new Attachment(book.fileLocation));
 
-                SmtpClient client = new SmtpClient();
-                client.EnableSsl = true;
-                client.Port = 587;
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials = false;
-                client.Host = "smtp.gmail.com";
+            SmtpClient client = new SmtpClient();
+            client.EnableSsl = true;
+            client.Port = 587;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.Host = "smtp.gmail.com";
 
-                client.Credentials = credentials;
+            client.Credentials = credentials;
 
-                client.Send(mail);
+            client.Send(mail);
 
         }
         catch (Exception ex)
