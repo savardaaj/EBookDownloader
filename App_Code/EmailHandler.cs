@@ -23,9 +23,9 @@ public class EmailHandler
         try
         {
             //put these in a config file. Encrypt?
-            NetworkCredential credentials = new NetworkCredential("dummymailsail@gmail.com", "1.13198824");
+            NetworkCredential credentials = new NetworkCredential("", "");
             FileTypeConverter ftc = new FileTypeConverter();
-            MailMessage mail = new MailMessage(new MailAddress("dummymailsail@gmail.com"), new MailAddress(toEmail));
+            MailMessage mail = new MailMessage(new MailAddress(""), new MailAddress(toEmail));
             mail.Subject = "ebook";
             mail.Body = "";
             if (book.fileType != ".mobi")
